@@ -60,3 +60,4 @@ def beginning(l):
         m.append(l[n])
         n = n+ 1
     return m    
+    
