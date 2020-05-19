@@ -1,0 +1,64 @@
+#Python Functions, Files, and Dictionaries
+#Week 5:
+#course_2_project:Sentiment Classifier
+# Finally, copy in your previous functions and write code that opens the file project_twitter_data.csv which has the fake generated twitter data (the text of a tweet, the number of retweets of that tweet, and the number of replies to that tweet). Your task is to build a sentiment classifier, which will detect how positive or negative each tweet is. Copy the code from the code windows above, and put that in the top of this code window. Now, you will write code to create a csv file called resulting_data.csv, which contains the Number of Retweets, Number of Replies, Positive Score (which is how many happy words are in the tweet), Negative Score (which is how many angry words are in the tweet), and the Net Score (how positive or negative the text is overall) for each tweet. The file should have those headers in that order. Remember that there is another component to this project. You will upload the csv file to Excel or Google Sheets and produce a graph of the Net Score vs Number of Retweets. Check Coursera for that portion of the assignment, if you’re accessing this textbook from Coursera.
+punctuation_chars = ["'", '"', ",", ".", "!", ":", ";", '#', '@']
+
+def strip_punctuation(str):
+    for punct in punctuation_chars:
+        str = str.replace(punct,"")
+    return str 
+
+positive_words = []
+with open("positive_words.txt") as pos_f:
+    for lin in pos_f:
+        if lin[0] != ';' and lin[0] != '\n':
+            positive_words.append(lin.strip())
+                        
+def get_pos(a):
+    a = strip_punctuation(a)
+    b = a.split()      
+    accum = 0
+    for wd in b:
+        c = wd.lower()
+        for pw in positive_words:            
+            if c == pw:
+                accum = accum + 1
+    return accum            
+
+
+negative_words = []
+with open("negative_words.txt") as pos_f:
+    for lin in pos_f:
+        if lin[0] != ';' and lin[0] != '\n':
+            negative_words.append(lin.strip())
+
+def get_neg(a):
+    a = strip_punctuation(a)
+    b = a.split()      
+    accum = 0
+    for wd in b:
+        for nw in negative_words:
+            d = wd.lower()
+            if wd == nw:
+                accum = accum + 1
+    return accum
+
+file1 = open("resulting_data.csv","w") 
+header = "Number of Retweets, Number of Replies, Positive Score, Negative Score, Net Score"
+file1.write(header) 
+file1.write("\n")
+f = open("project_twitter_data.csv", "r")
+q = f.readlines()
+for line in q[1:]:
+    vals = line.strip().split(',')
+    e = get_pos(vals[0])   
+    r = get_neg(vals[0])
+    u = e-r
+    h = ("{}, {}, {}, {}, {}".format(vals[1],vals[2],e,r,u))
+    file1.write(h) 
+    file1.write("\n")
+    
+    
+    
+    
